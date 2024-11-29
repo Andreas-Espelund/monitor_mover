@@ -30,6 +30,8 @@ Fowllow the guide from raycast on how to set up the script command [Raycast scri
 or run `create script command` in raycast.
 
 ```bash
+# install displayplacer
+brew install displayplacer
 
 # make the script executable
 chmod +x place-monitor.sh
