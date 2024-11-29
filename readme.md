@@ -1,4 +1,4 @@
-# Screen placer for mac
+# Monitor Mover for mac
 
 ## Why 😡
 Are you tired of doing this every time you connect to a new external monitor to your mac?

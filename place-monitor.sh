@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title Place monitor
+# @raycast.title Move monitor
 # @raycast.mode silent
 
 # Optional parameters:
