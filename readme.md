@@ -24,12 +24,15 @@ Currently this is very basic and only supports one monitor, but it
 works on my machine! 🤠
 
 
-## Usage 👷
+## Get started 👷
 
 Fowllow the guide from raycast on how to set up the script command [Raycast script commands](https://www.raycast.com/blog/getting-started-with-script-commands)
 or run `create script command` in raycast.
 
 ```bash
+# clone the repo
+git clone git@github.com:Andreas-Espelund/monitor_mover.git
+
 # install displayplacer
 brew install displayplacer
 
