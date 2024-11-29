@@ -14,21 +14,49 @@
 # @raycast.author andreas_espelund
 # @raycast.authorURL https://raycast.com/andreas_espelund
 
-# Extract screen IDs
-screen_ids=($(displayplacer list | grep "Persistent screen id" | awk '{print $4}'))
+# Extract screen information
+screen_info=$(displayplacer list)
+
+# Extract screen IDs and types
+screen_ids=($(echo "$screen_info" | grep "Persistent screen id" | awk '{print $4}'))
+screen_types=($(echo "$screen_info" | grep "Type" | awk '{print $2}'))
+
+# Initialize indices
+main_display_idx=0
+external_display_idx=0
+
+# Determine which is the main and which is the external display
+for i in "${!screen_ids[@]}"; do
+  if [[ "${screen_types[$i]}" == *"MacBook"* ]]; then
+    main_display_idx=$i
+  else
+    external_display_idx=$i
+  fi
+done
 
 # Extract modes and resolutions
-modes_and_resolutions=($(displayplacer list | grep "current mode" | sed -n 's/.*mode \([0-9]*\): res:\([0-9]*x[0-9]*\).*/\1 \2/p'))
+modes_and_resolutions=($(echo "$screen_info" | grep "current mode" | sed -n 's/.*mode \([0-9]*\): res:\([0-9]*x[0-9]*\).*/\1 \2/p'))
 
-# Assign names to displays
-main_display_id=${screen_ids[0]}
-main_display_mode=${modes_and_resolutions[0]}
-main_display_resolution=${modes_and_resolutions[1]}
 
-external_display_id=${screen_ids[1]}
-external_display_mode=${modes_and_resolutions[2]}
-external_display_resolution=${modes_and_resolutions[3]}
 
+# Assign display modes and resolutions based on determined main and external display
+main_display_mode=${modes_and_resolutions[main_display_idx*2]}
+main_display_resolution=${modes_and_resolutions[main_display_idx*2+1]}
+
+external_display_mode=${modes_and_resolutions[external_display_idx*2]}
+external_display_resolution=${modes_and_resolutions[external_display_idx*2+1]}
+
+external_display_id=${screen_ids[$external_display_idx]}
+main_display_id=${screen_ids[$main_display_idx]}
+
+# echo "Main display ID: $main_display_id"
+# echo "Main display mode: $main_display_mode"
+# echo "Main display resolution: $main_display_resolution"
+
+# echo "External display ID: $external_display_id"
+# echo "External display type: $external_display_type"
+# echo "External display mode: $external_display_mode"
+# echo "External display resolution: $external_display_resolution"
 
 # Check if a position argument is provided
 if [ -z "$1" ]; then
@@ -40,7 +68,7 @@ fi
 # Set origin based on the argument
 IFS='x' read width height <<< "$main_display_resolution"
 
-# Manualy adjusted offsets
+# Manually adjusted offsets
 w_offset=120
 h_offset=50
 
@@ -64,6 +92,7 @@ case "$1" in
         exit 1
         ;;
 esac
+
 
 # Move the external display
 displayplacer "id:$external_display_id origin:$origin mode:$external_display_mode"
